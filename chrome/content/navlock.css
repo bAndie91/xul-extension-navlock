@@ -1,14 +1,14 @@
 /* NavLock toolbar button styling */
 
 #navlock-button {
-  list-style-image: url("chrome://navlock/content/icons/unlocked-16.png");
+  list-style-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAQElEQVR4nGNgGGjAiE1w2rRp/3FpyMrKwqpnFFAAUEIUX+ijA1hsMFHqAooNYMEnmZmZCWdPnz6dNi4YeAMoBgDlWgsRuOC15gAAAABJRU5ErkJggg==');
 }
 
 #navlock-button[navlock-active="true"] {
-  list-style-image: url("chrome://navlock/content/icons/locked-16.png");
+  list-style-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAN0lEQVR4nGNgGAWjgIGBEZnzoIDhP7EaFSZA9DJR6gKKDWDBJynfj/DRw0JGrGoG3gsUG0AxAABKjwYQdX+nwwAAAABJRU5ErkJggg==');
 }
 
 #navlock-button[navlock-active="false"] {
-  list-style-image: url("chrome://navlock/content/icons/unlocked-16.png");
+  list-style-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAQElEQVR4nGNgGGjAiE1w2rRp/3FpyMrKwqpnFFAAUEIUX+ijA1hsMFHqAooNYMEnmZmZCWdPnz6dNi4YeAMoBgDlWgsRuOC15gAAAABJRU5ErkJggg==');
   opacity: 0.7;
 }

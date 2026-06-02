@@ -17,16 +17,28 @@
 
       onLoad: function() {
         this._args = window.arguments[0];
-        // checkbox must be set synchronously — setting it inside setTimeout
-        // causes XUL to not render it as checked
-        document.getElementById("navlock-locked").checked = !!this._args.locked;
         var self = this;
-        window.setTimeout(function() {
-          // textbox value must be set after a tick or XUL discards it
-          document.getElementById("navlock-prefix").value = self._args.prefix || "";
-          document.getElementById("navlock-mode").value   = self._args.mode || "block";
+        
+        // Use requestAnimationFrame to ensure element is fully laid out
+        // before we manipulate checked state
+        (typeof requestAnimationFrame !== "undefined" ? requestAnimationFrame : function(f) { setTimeout(f, 0); })(function() {
+          var cb = document.getElementById("navlock-locked");
+          var prefix = document.getElementById("navlock-prefix");
+          var mode = document.getElementById("navlock-mode");
+          
+          // Set checkbox checked state
+          if (self._args.locked) {
+            cb.setAttribute("checked", "true");
+            if (cb.doCheck) cb.doCheck(true);
+          } else {
+            cb.removeAttribute("checked");
+            if (cb.doCheck) cb.doCheck(false);
+          }
+          
+          prefix.value = self._args.prefix || "";
+          mode.value = self._args.mode || "block";
           self._syncEnabled();
-        }, 0);
+        });
       },
 
       _syncEnabled: function() {
