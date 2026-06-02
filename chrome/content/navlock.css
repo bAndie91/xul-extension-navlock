@@ -1,7 +1,7 @@
 /* NavLock toolbar button styling */
 
 /* Palette: default appearance in Customize Toolbar window */
-toolbarpalette #navlock-button {
+#navlock-button {
   list-style-image: url(chrome://navlock/content/wheel.png);
 }
 
