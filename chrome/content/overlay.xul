@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://navlock/content/navlock.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://navlock/locale/navlock.dtd">
+<overlay id="navlock-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <!-- Inject our toolbar button into the navbar -->
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbarbutton id="navlock-button"
+                   label="NavLock"
+                   tooltiptext="NavLock: click to configure, right-click to toggle"
+                   class="toolbarbutton-1 chromeclass-toolbar-additional"
+                   oncommand="NavLock.openDialog();"
+                   oncontextmenu="NavLock.toggle(); event.preventDefault();"/>
+  </toolbarpalette>
+
+  <!-- Script -->
+  <script type="application/javascript"
+          src="chrome://navlock/content/navlock.js"/>
+
+</overlay>

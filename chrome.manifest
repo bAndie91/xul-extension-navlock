@@ -1,0 +1,3 @@
+content  navlock            chrome/content/
+locale   navlock  en-US     locale/en-US/
+overlay  chrome://browser/content/browser.xul  chrome://navlock/content/overlay.xul

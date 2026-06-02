@@ -1,0 +1,26 @@
+/* NavLock toolbar button styling */
+
+#navlock-button {
+  list-style-image: url("chrome://browser/skin/Toolbar.png");
+  -moz-image-region: rect(0px, 360px, 18px, 342px); /* lock icon, row 0 col 19 */
+}
+
+@media (min-resolution: 1.1dppx) {
+  #navlock-button {
+    list-style-image: url("chrome://browser/skin/Toolbar@2x.png");
+    -moz-image-region: rect(0px, 720px, 36px, 684px);
+  }
+}
+
+/* When active (locked), show a distinct visual state */
+#navlock-button[navlock-active="true"] {
+  /* Use a CSS border tint; works without an icon */
+  outline: 2px solid #e07000;
+  outline-offset: -2px;
+  border-radius: 3px;
+}
+
+/* Dim the button when off */
+#navlock-button[navlock-active="false"] {
+  opacity: 0.6;
+}

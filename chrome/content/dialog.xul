@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "chrome://navlock/locale/navlock.dtd">
+<dialog id="navlock-dialog"
+        title="NavLock — Tab Configuration"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        style="background-color: -moz-dialog; color: -moz-dialogtext;"
+        onload="NavLockDialog.onLoad();"
+        ondialogaccept="return NavLockDialog.onAccept();"
+        ondialogcancel="return true;"
+        width="500">
+
+  <script type="application/javascript">
+  <![CDATA[
+    var NavLockDialog = {
+
+      // window.arguments[0] is the args object passed by NavLock.openDialog()
+      _args: null,
+
+      onLoad: function() {
+        this._args = window.arguments[0];
+        var self = this;
+        window.setTimeout(function() {
+          document.getElementById("navlock-prefix").value   = self._args.prefix || "";
+          document.getElementById("navlock-locked").checked = self._args.locked;
+          var mode = self._args.mode || "redirect";
+          document.getElementById("navlock-mode").value = mode;
+          self._syncEnabled();
+        }, 0);
+      },
+
+      _syncEnabled: function() {
+        var locked = document.getElementById("navlock-locked").checked;
+        document.getElementById("navlock-prefix").disabled = !locked;
+        document.getElementById("navlock-mode").disabled   = !locked;
+      },
+
+      onToggleLocked: function() {
+        this._syncEnabled();
+      },
+
+      onAccept: function() {
+        var prefix = document.getElementById("navlock-prefix").value.trim();
+        var locked = document.getElementById("navlock-locked").checked;
+
+        if (locked && prefix && !prefix.match(/^https?:\/\/.+/)) {
+          alert("URL prefix must start with http:// or https://");
+          return false;
+        }
+
+        // Write back to the args object; NavLock.openDialog() reads .result
+        this._args.result = {
+          prefix: prefix,
+          locked: locked,
+          mode:   document.getElementById("navlock-mode").value
+        };
+        return true;
+      }
+    };
+  ]]>
+  </script>
+
+  <groupbox>
+    <caption label="This tab"/>
+    <checkbox id="navlock-locked"
+              label="Lock this tab to a URL prefix"
+              oncommand="NavLockDialog.onToggleLocked();"/>
+  </groupbox>
+
+  <groupbox>
+    <caption label="Allowed URL prefix"/>
+    <hbox align="center">
+      <label value="Prefix:" control="navlock-prefix"/>
+      <textbox id="navlock-prefix" flex="1"
+               placeholder="https://example.com/some/path/"/>
+    </hbox>
+    <description style="color:grey; font-size:smaller;">
+      Navigation is allowed if the URL starts with this prefix
+      (trailing slashes are ignored). Leave blank to lock to the
+      exact current URL only.
+    </description>
+  </groupbox>
+
+  <groupbox>
+    <caption label="On violation"/>
+    <hbox align="center">
+      <label value="Action:" control="navlock-mode"/>
+      <menulist id="navlock-mode">
+        <menupopup>
+          <menuitem value="redirect" label="Redirect back to the prefix URL"/>
+          <menuitem value="block"    label="Block navigation and show notification"/>
+        </menupopup>
+      </menulist>
+    </hbox>
+    <description style="color:grey; font-size:smaller;">
+      This setting is global (applies to all locked tabs in all windows).
+    </description>
+  </groupbox>
+
+</dialog>
