@@ -17,21 +17,14 @@
 
       onLoad: function() {
         this._args = window.arguments[0];
+        // checkbox must be set synchronously — setting it inside setTimeout
+        // causes XUL to not render it as checked
+        document.getElementById("navlock-locked").checked = !!this._args.locked;
         var self = this;
         window.setTimeout(function() {
-          var prefixEl = document.getElementById("navlock-prefix");
-          var lockedEl = document.getElementById("navlock-locked");
-          var modeEl   = document.getElementById("navlock-mode");
-
-          prefixEl.value = self._args.prefix || "";
-
-          if (self._args.locked) {
-            lockedEl.setAttribute("checked", "true");
-          } else {
-            lockedEl.removeAttribute("checked");
-          }
-
-          modeEl.value = self._args.mode || "redirect";
+          // textbox value must be set after a tick or XUL discards it
+          document.getElementById("navlock-prefix").value = self._args.prefix || "";
+          document.getElementById("navlock-mode").value   = self._args.mode || "block";
           self._syncEnabled();
         }, 0);
       },

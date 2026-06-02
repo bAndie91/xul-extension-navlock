@@ -1,17 +1,14 @@
 /* NavLock toolbar button styling */
 
-/* default: closed lock, grey */
 #navlock-button {
-  list-style-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='8' width='10' height='7' rx='1.5' fill='%23888'/%3E%3Cpath d='M5 8V5.5a3 3 0 0 1 6 0V8' stroke='%23888' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Crect x='7' y='10' width='2' height='3' rx='1' fill='%23fff'/%3E%3C/svg%3E");
+  list-style-image: url("chrome://navlock/content/icons/unlocked-16.png");
 }
 
-/* locked: closed lock, orange */
 #navlock-button[navlock-active="true"] {
-  list-style-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='8' width='10' height='7' rx='1.5' fill='%23e07000'/%3E%3Cpath d='M5 8V5.5a3 3 0 0 1 6 0V8' stroke='%23e07000' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Crect x='7' y='10' width='2' height='3' rx='1' fill='%23fff'/%3E%3C/svg%3E");
+  list-style-image: url("chrome://navlock/content/icons/locked-16.png");
 }
 
-/* unlocked: open shackle lock, dimmed */
 #navlock-button[navlock-active="false"] {
-  list-style-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='8' width='10' height='7' rx='1.5' fill='%23aaa'/%3E%3Cpath d='M5 8V5.5a3 3 0 0 1 6 0V3.5' stroke='%23aaa' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Crect x='7' y='10' width='2' height='3' rx='1' fill='%23fff'/%3E%3C/svg%3E");
+  list-style-image: url("chrome://navlock/content/icons/unlocked-16.png");
   opacity: 0.7;
 }

@@ -10,6 +10,7 @@
                    label="NavLock"
                    tooltiptext="NavLock: click to configure, right-click to toggle"
                    class="toolbarbutton-1 chromeclass-toolbar-additional"
+                   image="chrome://navlock/content/icons/unlocked-16.png"
                    oncommand="NavLock.openDialog();"
                    oncontextmenu="NavLock.toggle(); event.preventDefault();"/>
   </toolbarpalette>
