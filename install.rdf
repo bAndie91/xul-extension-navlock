@@ -8,7 +8,7 @@
     <em:description>Lock browser navigation to a domain/path prefix</em:description>
     <em:creator>hband</em:creator>
     <em:homepageURL></em:homepageURL>
-    <em:iconURL>chrome://navlock/chrome/content/wheel24.png</em:iconURL>
+    <em:iconURL>chrome://navlock/chrome/content/wheel.png</em:iconURL>
     <em:type>2</em:type><!-- browser extension -->
 
     <em:targetApplication>

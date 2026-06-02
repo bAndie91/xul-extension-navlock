@@ -2,12 +2,12 @@
 
 /* Toolbar: inactive state (default) */
 #navlock-button[navlock-active="false"] {
-  list-style-image: url(chrome://navlock/content/wheel24.png) !important;
+  list-style-image: url(chrome://navlock/content/wheel.png) !important;
 }
 
 /* Toolbar: active state */
 #navlock-button[navlock-active="true"] {
-  list-style-image: url(chrome://navlock/content/wheel24-locked.png) !important;
+  list-style-image: url(chrome://navlock/content/wheel-locked.png) !important;
 }
 
 checkbox image.checkbox-check {
