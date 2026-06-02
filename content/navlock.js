@@ -33,12 +33,16 @@ var NavLock = (function() {
   function _showNotification(browser, msg) {
     var nb = gBrowser.getNotificationBox(browser);
     // Don't stack duplicate notifications
-    if (nb.getNotificationWithValue("navlock-blocked")) return;
+    var prev_notif = nb.getNotificationWithValue("navlock-blocked");
+    if (prev_notif) {
+      // close previous notification banner
+      prev_notif.close();
+    }
     nb.appendNotification(
       msg,
       "navlock-blocked",
-      null,
-      nb.PRIORITY_WARNING_MEDIUM,
+      "chrome://navlock/content/wheel16.png",
+      nb.PRIORITY_INFO_MEDIUM,
       null
     );
   }
@@ -90,8 +94,7 @@ var NavLock = (function() {
           if (mode === "redirect") {
             theBrowser.loadURI(prefix);
           } else {
-            _showNotification(theBrowser,
-                "NavLock blocked navigation to: " + url);
+            _showNotification(theBrowser, "NavLock blocked navigation to: " + url);
           }
         }, 50);
       },
