@@ -1,5 +1,10 @@
 /* NavLock toolbar button styling */
 
+/* Palette: default appearance in Customize Toolbar window */
+toolbarpalette #navlock-button {
+  list-style-image: url(chrome://navlock/content/wheel.png) !important;
+}
+
 /* Toolbar: inactive state (default) */
 #navlock-button[navlock-active="false"] {
   list-style-image: url(chrome://navlock/content/wheel.png) !important;
