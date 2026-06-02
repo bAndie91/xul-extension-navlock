@@ -4,7 +4,7 @@ var NavLock = (function() {
 
   /*
    * Per-tab state is stored in a WeakMap keyed by the <browser> XUL element.
-   * Each value is an object: { prefix: String|null, redirecting: Boolean }
+   * Each value is an object: { prefix: String|null, mode: String, redirecting: Boolean }
    *
    * prefix === null  →  tab is unlocked (no interception)
    * prefix === ""    →  should not happen (we normalise "" to null)
@@ -13,17 +13,10 @@ var NavLock = (function() {
    * remove the nsIWebProgress listener when the tab is closed or we unlock.
    */
 
-  // WeakMap: browser element → { prefix, redirecting }
+  // WeakMap: browser element → { prefix, mode, redirecting }
   var _tabState    = new WeakMap();
   // Map: browser element → attached listener object (strong ref needed for removal)
   var _tabListener = new Map();
-
-  /* ── prefs (global defaults only – per-tab state is in-memory) ──────── */
-  var _prefs = Components.classes["@mozilla.org/preferences-service;1"]
-                         .getService(Components.interfaces.nsIPrefBranch);
-
-  function _getPrefStr(k)   { return _prefs.getCharPref(k); }
-  function _getPrefBool(k)  { return _prefs.getBoolPref(k); }
 
   /* ── URL matching ───────────────────────────────────────────────────── */
   function _isAllowed(url, prefix) {
@@ -87,9 +80,9 @@ var NavLock = (function() {
         // ── Violation ───────────────────────────────────────────────────
         aRequest.cancel(Components.results.NS_BINDING_ABORTED);
 
-        var mode = _getPrefStr("extensions.navlock.mode");
         // snapshot these before the async timeout fires
-        var prefix    = state.prefix;
+        var mode       = state.mode;
+        var prefix     = state.prefix;
         var theBrowser = browser;
 
         state.redirecting = true;
@@ -100,7 +93,6 @@ var NavLock = (function() {
           if (mode === "redirect") {
             theBrowser.loadURI(prefix);
           } else {
-            //theBrowser.loadURI("about:blank");
             _showNotification(theBrowser,
                 "NavLock blocked navigation to: " + url);
           }
@@ -134,9 +126,9 @@ var NavLock = (function() {
   }
 
   /* ── lock / unlock a specific browser element ───────────────────────── */
-  function _lockBrowser(browser, prefix) {
+  function _lockBrowser(browser, prefix, mode) {
     // prefix already normalised (or null to unlock)
-    _tabState.set(browser, { prefix: prefix, redirecting: false });
+    _tabState.set(browser, { prefix: prefix, mode: mode || "block", redirecting: false });
     if (prefix !== null) {
       _attachListener(browser);
     } else {
@@ -219,12 +211,15 @@ var NavLock = (function() {
     openDialog: function() {
       var browser = gBrowser.selectedBrowser;
       var state   = _tabState.get(browser);
-      var args    = {
-        prefix:  (state && state.prefix !== null) ? state.prefix : "",
-        locked:  !!(state && state.prefix !== null),
-        mode:    _getPrefStr("extensions.navlock.mode"),
+      var locked  = !!(state && state.prefix !== null);
+      // When locked use stored prefix; when unlocked prefill with current URL
+      var prefix  = locked ? state.prefix : (_normalisePrefix(gBrowser.currentURI.spec) || "");
+      var args = {
+        prefix: prefix,
+        locked: locked,
+        mode:   (state && state.mode) || "block",
         // dialog writes back here:
-        result:  null
+        result: null
       };
 
       window.openDialog(
@@ -235,12 +230,9 @@ var NavLock = (function() {
       );
 
       if (args.result) {
-        // Save global mode pref
-        _prefs.setCharPref("extensions.navlock.mode", args.result.mode);
-
         var newPrefix = _normalisePrefix(args.result.prefix);
         if (!args.result.locked) newPrefix = null;
-        _lockBrowser(browser, newPrefix);
+        _lockBrowser(browser, newPrefix, args.result.mode);
       }
       _updateButton();
     },

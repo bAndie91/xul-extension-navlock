@@ -13,17 +13,25 @@
   <![CDATA[
     var NavLockDialog = {
 
-      // window.arguments[0] is the args object passed by NavLock.openDialog()
       _args: null,
 
       onLoad: function() {
         this._args = window.arguments[0];
         var self = this;
         window.setTimeout(function() {
-          document.getElementById("navlock-prefix").value   = self._args.prefix || "";
-          document.getElementById("navlock-locked").checked = self._args.locked;
-          var mode = self._args.mode || "redirect";
-          document.getElementById("navlock-mode").value = mode;
+          var prefixEl = document.getElementById("navlock-prefix");
+          var lockedEl = document.getElementById("navlock-locked");
+          var modeEl   = document.getElementById("navlock-mode");
+
+          prefixEl.value = self._args.prefix || "";
+
+          if (self._args.locked) {
+            lockedEl.setAttribute("checked", "true");
+          } else {
+            lockedEl.removeAttribute("checked");
+          }
+
+          modeEl.value = self._args.mode || "redirect";
           self._syncEnabled();
         }, 0);
       },
@@ -47,7 +55,6 @@
           return false;
         }
 
-        // Write back to the args object; NavLock.openDialog() reads .result
         this._args.result = {
           prefix: prefix,
           locked: locked,
@@ -75,8 +82,7 @@
     </hbox>
     <description style="color:grey; font-size:smaller;">
       Navigation is allowed if the URL starts with this prefix
-      (trailing slashes are ignored). Leave blank to lock to the
-      exact current URL only.
+      (trailing slashes are ignored).
     </description>
   </groupbox>
 
@@ -92,7 +98,7 @@
       </menulist>
     </hbox>
     <description style="color:grey; font-size:smaller;">
-      This setting is global (applies to all locked tabs in all windows).
+      This setting applies to this tab only.
     </description>
   </groupbox>
 
