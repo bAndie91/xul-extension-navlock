@@ -4,13 +4,10 @@ var NavLock = (function() {
 
   /*
    * Per-tab state is stored in a WeakMap keyed by the <browser> XUL element.
-   * Each value is an object: { prefix: String|null, mode: String, redirecting: Boolean }
+   * Each value is an object: { prefix: String|null, mode: String, redirecting: Boolean, lastMode: String }
    *
    * prefix === null  →  tab is unlocked (no interception)
-   * prefix === ""    →  should not happen (we normalise "" to null)
-   *
-   * We also keep a parallel Map (browser → listener object) so we can
-   * remove the nsIWebProgress listener when the tab is closed or we unlock.
+   * lastMode stores the mode before unlock, so toggle can restore it on re-lock
    */
 
   // WeakMap: browser element → { prefix, mode, redirecting }
@@ -128,7 +125,10 @@ var NavLock = (function() {
   /* ── lock / unlock a specific browser element ───────────────────────── */
   function _lockBrowser(browser, prefix, mode) {
     // prefix already normalised (or null to unlock)
-    _tabState.set(browser, { prefix: prefix, mode: mode || "block", redirecting: false });
+    var state = _tabState.get(browser) || {};
+    var newMode = mode !== undefined ? mode : (state.mode || "block");
+    var lastMode = prefix === null ? newMode : state.lastMode;
+    _tabState.set(browser, { prefix: prefix, mode: newMode, redirecting: false, lastMode: lastMode });
     if (prefix !== null) {
       _attachListener(browser);
     } else {
@@ -194,12 +194,13 @@ var NavLock = (function() {
       var locked  = state && state.prefix !== null;
 
       if (locked) {
-        _lockBrowser(browser, null);   // unlock
+        _lockBrowser(browser, null);   // unlock, preserves lastMode
       } else {
-        // Lock: seed from current URL
+        // Lock: seed from current URL, use lastMode if available
         var url    = gBrowser.currentURI.spec;
         var prefix = _normalisePrefix(url) || "about:blank";
-        _lockBrowser(browser, prefix);
+        var mode   = state && state.lastMode ? state.lastMode : "block";
+        _lockBrowser(browser, prefix, mode);
       }
       _updateButton();
     },
