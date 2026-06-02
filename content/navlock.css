@@ -3,11 +3,6 @@
 
 /* NavLock toolbar button styling */
 
-/* Palette: default appearance in Customize Toolbar window */
-#navlock-button {
-  list-style-image: url(chrome://navlock/content/wheel.png);
-}
-
 /* Toolbar: inactive state (default) */
 toolbox toolbar[iconsize=small] #navlock-button[navlock-active="false"] {
   list-style-image: url(chrome://navlock/content/wheel16.png);

@@ -1,0 +1,4 @@
+/* Palette: default appearance in Customize Toolbar window */
+#navlock-button {
+  list-style-image: url(chrome://navlock/content/wheel.png);
+}
