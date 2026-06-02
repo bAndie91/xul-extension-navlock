@@ -55,11 +55,6 @@
         var prefix = document.getElementById("navlock-prefix").value.trim();
         var locked = document.getElementById("navlock-locked").checked;
 
-        if (locked && prefix && !prefix.match(/^https?:\/\/.+/)) {
-          alert("URL prefix must start with http:// or https://");
-          return false;
-        }
-
         this._args.result = {
           prefix: prefix,
           locked: locked,
