@@ -10,6 +10,7 @@
                    label="NavLock"
                    tooltiptext="NavLock: click to configure, right-click to toggle"
                    class="toolbarbutton-1 chromeclass-toolbar-additional"
+                   image="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAQElEQVR4nGNgGGjAiE1w2rRp/3FpyMrKwqpnFFAAUEIUX+ijA1hsMFHqAooNYMEnmZmZCWdPnz6dNi4YeAMoBgDlWgsRuOC15gAAAABJRU5ErkJggg=="
                    width="28"
                    height="28"
                    oncommand="NavLock.openDialog();"
