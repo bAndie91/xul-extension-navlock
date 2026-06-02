@@ -4,7 +4,7 @@
 /* NavLock toolbar button styling */
 
 /* Toolbar: inactive state (default) */
-toolbox toolbar[iconsize=small] #navlock-button[navlock-active="false"] {
+toolbox toolbar[iconsize=small] #navlock-button {
   list-style-image: url(chrome://navlock/content/wheel16.png);
 }
 
@@ -14,7 +14,7 @@ toolbox toolbar[iconsize=small] #navlock-button[navlock-active="true"] {
 }
 
 /* Toolbar: inactive state (default) */
-toolbox toolbar[iconsize=large] #navlock-button[navlock-active="false"] {
+toolbox toolbar[iconsize=large] #navlock-button {
   list-style-image: url(chrome://navlock/content/wheel24.png);
 }
 
