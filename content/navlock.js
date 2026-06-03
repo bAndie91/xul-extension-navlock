@@ -30,7 +30,7 @@ var NavLock = (function() {
   }
 
   /* ── notification bar ───────────────────────────────────────────────── */
-  function _showNotification(browser, msg) {
+  function _showNotification(browser, msg, url) {
     var nb = gBrowser.getNotificationBox(browser);
     // Don't stack duplicate notifications
     var prev_notif = nb.getNotificationWithValue("navlock-blocked");
@@ -38,13 +38,44 @@ var NavLock = (function() {
       // close previous notification banner
       prev_notif.close();
     }
-    nb.appendNotification(
+    var buttons = [];
+    var n = nb.appendNotification(
       msg,
       "navlock-blocked",
       "chrome://navlock/content/wheel16.png",
       nb.PRIORITY_INFO_MEDIUM,
-      null
+      buttons,
     );
+
+    // Append the link to the notification's message text.
+    // XUL structure:
+    // <notification>
+    //   <hbox class="notification-inner">
+    //     <hbox anonid="details">
+    //       <description class="messageText">
+    let inner = n.boxObject.firstChild; // hbox.notification-inner
+    let description_el = inner.querySelector(".messageText");
+    // Create inline link label
+    let link = document.createElement("label");
+    link.setAttribute("value", url);
+    link.setAttribute("class", "text-link");
+    link.setAttribute("style", "margin-left:6px;");
+    link.addEventListener("click", function (e) {
+      if(e.button == 2) return; // right-click is not handled well by openUILink.
+      e.stopPropagation();
+      e.preventDefault();
+      openUILink(url, e);
+    }, false);
+    // Append inline
+    description_el.appendChild(link);
+  }
+
+  function HtmlToDocumentFragment(htmlString) {
+    var parser = new DOMParser();
+    var doc2 = parser.parseFromString(htmlString, "text/html");
+    var frag = document.createDocumentFragment();
+    while (doc2.body.firstChild) frag.appendChild(doc2.body.firstChild);
+    return frag;
   }
 
   /* ── per-browser progress listener factory ──────────────────────────── */
@@ -94,7 +125,7 @@ var NavLock = (function() {
           if (mode === "redirect") {
             theBrowser.loadURI(prefix);
           } else {
-            _showNotification(theBrowser, "NavLock blocked navigation to: " + url);
+            _showNotification(theBrowser, "NavLock blocked navigation to: ", url);
           }
         }, 50);
       },

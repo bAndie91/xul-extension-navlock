@@ -4,10 +4,10 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>navlock@xulextension.uucp.hu</em:id>
     <em:name>NavLock</em:name>
-    <em:version>0.1</em:version>
-    <em:description>Lock browser navigation to the given domain or even URL path prefix.
+    <em:version>0.2</em:version>
+    <em:description>Lock browser navigation to the given domain or even an URL path prefix.
 
-Graphics by Andrean Prabowo and Smashicons.
+Graphics by Freepik and Smashicons on www.flaticon.com.
 </em:description>
     <em:creator>hband</em:creator>
     <em:homepageURL></em:homepageURL>
