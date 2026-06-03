@@ -38,13 +38,20 @@ var NavLock = (function() {
       // close previous notification banner
       prev_notif.close();
     }
-    var buttons = [];
     var n = nb.appendNotification(
       msg,
       "navlock-blocked",
       "chrome://navlock/content/wheel16.png",
       nb.PRIORITY_INFO_MEDIUM,
-      buttons,
+      [{
+        label: "Unlock",
+        accessKey: "U",
+        callback: function(notification, button_descr, button_el) {
+          _lockBrowser(browser, null);
+          _updateButton();
+          return true;  // don't close the notification
+        },
+      }],
     );
 
     // Append the link to the notification's message text.
